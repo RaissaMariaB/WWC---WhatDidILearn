@@ -1,22 +1,25 @@
 package com.wwc.whatdidilearn.views
 
-import android.icu.text.CaseMap
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import  androidx.recyclerview.widget.RecyclerView
 import com.wwc.whatdidilearn.R
 import com.wwc.whatdidilearn.entities.ItemLearned
-import kotlinx.android.synthetic.main.item_learned.view.*
-import java.io.FileDescriptor
+
 
 class LearnedItemsAdapter: RecyclerView.Adapter<LearnedItemsAdapter.LearnedItemViewHolder>() {
     var data = listOf<ItemLearned>()
+    set(value) {
+        field = value
+        notifyDataSetChanged()
+    }
 
     inner class LearnedItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     val titleItem: TextView = itemView.findViewById(R.id.item_title)
     val descriptionItem: TextView = itemView.findViewById(R.id.item_description)
-    val levelItem: TextView = itemView.findViewById(R.id.item_level)
+    val levelItem: View = itemView.findViewById(R.id.item_level)
 
     fun bind(title: String, description: String, color: Int ) {
         titleItem.text = title
@@ -27,14 +30,18 @@ class LearnedItemsAdapter: RecyclerView.Adapter<LearnedItemsAdapter.LearnedItemV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LearnedItemViewHolder {
-        TODO("Not yet implemented")
+        val layoutInflater: LayoutInflater  = LayoutInflater.from(parent.context)
+        val itemView: View = layoutInflater.inflate(R.layout.item_learned, parent, false)
+        return LearnedItemViewHolder(itemView)
+    }
+
+
+    override fun onBindViewHolder(holder: LearnedItemViewHolder, position: Int) {
+       val learnedItemViewHolder: ItemLearned = data.get(position)
+        holder.bind(learnedItemViewHolder.description, learnedItemViewHolder.title, learnedItemViewHolder.understandingLevel.color)
     }
 
     override fun getItemCount(): Int {
         return data.size
-    }
-
-    override fun onBindViewHolder(holder: LearnedItemViewHolder, position: Int) {
-        TODO("Not yet implemented")
     }
 }
